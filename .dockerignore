@@ -1,0 +1,31 @@
+# Exclude Node dependencies
+node_modules
+npm-debug.log
+
+# Exclude local build artifacts
+.next
+out
+build
+
+# Exclude environment variables and local configurations
+.env*.local
+.env
+.vercel
+
+# Exclude source control files
+.git
+.gitignore
+.gitattributes
+
+# Exclude IDE configurations
+.vscode
+.idea
+
+# Exclude Docker specifics
+Dockerfile
+.dockerignore
+docker-compose*
+
+# Miscellaneous metadata files
+*.md
+LICENSE
