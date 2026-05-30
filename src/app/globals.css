@@ -25,6 +25,16 @@
   --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+/* Smooth anchor scroll for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Remove tap highlight on mobile for a cleaner, more native feel */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Custom global styles */
 body {
   background-color: var(--color-brand-dark);
@@ -33,23 +43,32 @@ body {
   overflow-x: hidden;
 }
 
-/* Modern thin scrollbar styling */
+/* Premium thin amber scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0A0A0C;
+  background: #030712;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
-  border-radius: 3px;
+  background: rgba(245, 158, 11, 0.3);
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3B82F6;
+  background: rgba(245, 158, 11, 0.6);
+}
+
+/* Mobile hero headline scaling — prevents overflow on small screens */
+@media (max-width: 768px) {
+  .text-7xl,
+  .text-8xl {
+    font-size: 2.5rem !important;
+    line-height: 1.1 !important;
+  }
 }
 
 /* Glassmorphism helpers */
@@ -69,8 +88,10 @@ body {
 .bg-grid-blueprint {
   background-size: 40px 40px;
   background-image: 
-    linear-gradient(to right, rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
 }
 
 /* Text glow utilities */
@@ -81,4 +102,17 @@ body {
 .border-amber-glow {
   box-shadow: 0 0 15px rgba(245, 158, 11, 0.15);
 }
+
+.text-blue-glow {
+  text-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+}
+
+.border-blue-glow {
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+}
+
+/* Custom cursor */
+.custom-cursor-active * { cursor: none !important; }
+.cursor-dot { pointer-events: none; position: fixed; z-index: 9999; }
+.cursor-ring { pointer-events: none; position: fixed; z-index: 9998; }
 

@@ -3,16 +3,15 @@
 import * as React from "react";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ScrollReveal from "./ScrollReveal";
 import {
   Database,
   Network,
   Play,
-  Pause,
   RefreshCw,
   Activity,
   Fingerprint,
   ShieldCheck,
-  Cpu,
   Server,
   ChevronRight,
   Terminal as TerminalIcon,
@@ -39,6 +38,7 @@ interface ProductCardProps {
   title: string;
   category: string;
   tags: string[];
+  description: string;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -46,11 +46,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   className = "",
   title,
   category,
-  tags
+  tags,
+  description
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -65,8 +65,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <motion.div
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       whileHover={{ y: -4, scale: 1.01 }}
       transition={mechanicalSpring}
       className={`relative group overflow-hidden rounded-xl bg-brand-panel border border-white/[0.04] transition-all duration-300 ${className}`}
@@ -100,7 +98,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       <div className="relative z-20 flex flex-col h-full p-6 justify-between gap-6">
         
         {/* Header Details */}
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-brand-blueprint font-semibold">
               {category}
@@ -112,10 +110,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <h3 className="text-xl font-bold tracking-tight text-white font-sans group-hover:text-brand-white transition-colors duration-200">
             {title}
           </h3>
+          <p className="text-[12px] text-zinc-400 group-hover:text-zinc-300 transition-colors leading-relaxed font-light mt-1.5">
+            {description}
+          </p>
         </div>
 
         {/* Visual Showcase (Children Slot) */}
-        <div className="flex-grow flex items-center justify-center min-h-[170px] relative">
+        <div className="flex-grow flex items-center justify-center min-h-[170px] w-full relative">
           {children}
         </div>
 
@@ -256,7 +257,7 @@ interface ContentNode {
   status: "active" | "draft";
   x: number;
   y: number;
-  properties: Record<string, any>;
+  properties: Record<string, string | number>;
 }
 
 const NexusCMSVisual: React.FC = () => {
@@ -268,7 +269,7 @@ const NexusCMSVisual: React.FC = () => {
     { id: "pages", label: "Pages Collection", type: "collection", status: "active", x: 30, y: 35, properties: { entries: "148 total", localization: "EN, FR, DE, JP" } as Record<string, string> },
     { id: "blogPost", label: "Blog Template", type: "document", status: "active", x: 70, y: 20, properties: { layout: "dynamicGrid", slug: "/insights/*" } as Record<string, string> },
     { id: "products", label: "Product Listing", type: "document", status: "draft", x: 75, y: 70, properties: { catalogSync: "AetherDB Hook", currency: "USD/EUR" } as Record<string, string> },
-    { id: "graphql", label: "Edge Federation", type: "field", status: "active", x: 120, y: 45, properties: { cacheHeader: "s-maxage=86400", compression: "brotli" } as Record<string, string> }
+    { id: "graphql", label: "Edge Federation", type: "field", status: "active", x: 90, y: 45, properties: { cacheHeader: "s-maxage=86400", compression: "brotli" } as Record<string, string> }
   ], []);
 
   const activeNodeData = nodes.find(n => n.id === selectedNode);
@@ -283,8 +284,8 @@ const NexusCMSVisual: React.FC = () => {
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
           <line x1="30%" y1="35%" x2="70%" y2="20%" stroke="rgba(59, 130, 246, 0.2)" strokeWidth="1" strokeDasharray="3 3" />
           <line x1="30%" y1="35%" x2="75%" y2="70%" stroke="rgba(59, 130, 246, 0.2)" strokeWidth="1" strokeDasharray="3 3" />
-          <line x1="70%" y1="20%" x2="120%" y2="45%" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1.5" />
-          <line x1="75%" y1="70%" x2="120%" y2="45%" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1.5" />
+          <line x1="70%" y1="20%" x2="90%" y2="45%" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1.5" />
+          <line x1="75%" y1="70%" x2="90%" y2="45%" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1.5" />
         </svg>
 
         {/* Dynamic Schema Nodes */}
@@ -654,6 +655,17 @@ const HeliosVisual: React.FC = () => {
             transition={{ type: "spring", stiffness: 100 }}
           />
 
+          {/* Pulse active dot inside the SVG to keep it mathematically aligned */}
+          <circle
+            cx={240}
+            cy={75 - ((points[points.length - 1] - 0) / (Math.max(...points, 120) - 0)) * 75}
+            r="4"
+            fill={spikeActive ? "#F59E0B" : "#3B82F6"}
+            stroke="#000"
+            strokeWidth="1.5"
+            className="animate-pulse"
+          />
+
           {/* Sparkline gradients */}
           <defs>
             <linearGradient id="blueprintGradient" x1="0" y1="0" x2="0" y2="1">
@@ -666,16 +678,6 @@ const HeliosVisual: React.FC = () => {
             </linearGradient>
           </defs>
         </svg>
-
-        {/* Pulse active dot on final node */}
-        <div 
-          className="absolute w-2 h-2 rounded-full border border-black bg-brand-blueprint animate-pulse pointer-events-none"
-          style={{
-            right: "4px",
-            top: `${72 - points[points.length - 1] * 0.55}px`,
-            backgroundColor: spikeActive ? "#F59E0B" : "#3B82F6"
-          }}
-        />
 
         <div className="absolute top-2 right-2 bg-brand-dark/80 text-[7px] font-semibold text-zinc-500 border border-white/[0.05] px-1 rounded flex items-center gap-1 font-mono">
           <Activity className="w-2.5 text-brand-blueprint animate-pulse" />
@@ -907,7 +909,7 @@ const MitrixoCoreVisual: React.FC = () => {
                   {region}
                 </span>
               </div>
-              <ChevronRight className={`w-3 h-3 text-zinc-600 ${isActive ? "text-brand-blueprint translate-x-0.5" : ""} transition-all`} />
+              <ChevronRight className={`w-3 h-3 text-zinc-600 hidden md:block ${isActive ? "text-brand-blueprint translate-x-0.5" : ""} transition-all`} />
             </button>
           );
         })}
@@ -982,94 +984,112 @@ export default function ProductPipeline() {
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-brand-amber/5 rounded-full blur-[150px] -z-10 pointer-events-none" />
 
       {/* Header Info */}
-      <div className="flex flex-col items-center text-center gap-4 mb-20 max-w-2xl mx-auto">
+      <ScrollReveal direction="up" className="flex flex-col items-center text-center gap-4 mb-20 max-w-2xl mx-auto">
         
         {/* Subtle dynamic status badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/[0.04] bg-white/[0.01] backdrop-blur-md">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-amber opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-amber"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FBBF24] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FBBF24]"></span>
           </span>
           <span className="text-[10px] font-mono tracking-wider font-semibold text-zinc-300">
-            MITRIXO PIPELINE ACTIVE // Q2-Q3 ARCHITECTURES
+            PROPRIETARY SAAS PRODUCT PIPELINE
           </span>
         </div>
 
         <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-          Future-Ready Standalone <br className="hidden sm:inline" />
+          Proprietary SaaS Solutions & <br className="hidden sm:inline" />
           <span className="bg-gradient-to-r from-brand-blueprint via-brand-white to-brand-amber bg-clip-text text-transparent">
-            SaaS Infrastructures
+            Performance Infrastructure
           </span>
         </h2>
         
-        <p className="text-sm text-zinc-400 leading-relaxed font-normal">
-          Explore our tactical blueprint of distributed database systems, federated CMS engines, and cryptographically guarded pipelines ready to back next-gen enterprise operations.
+        <p className="text-sm text-zinc-400 leading-relaxed font-light">
+          We engineer and maintain a custom suite of high-availability SaaS platforms and developer core tools. These standalone products handle global database synchronization, federate edge CMS assets, secure authentication, and automate telemetry workflows under heavy loads.
         </p>
 
-      </div>
+      </ScrollReveal>
 
       {/* Bento Grid Container */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[auto]">
         
         {/* CARD 1: AetherDB */}
+        <ScrollReveal delay={0 * 0.1}>
         <ProductCard
           title="AetherDB Cache Layer"
           category="Distributed Data Sync"
           tags={["Rust", "WebAssembly", "Redis", "PostgreSQL"]}
+          description="A globally distributed, ultra-low latency memory cache layer that optimizes DB read throughput. Built on a custom Rust-compiled WASM sync framework with edge replication under 0.8ms."
           className="md:col-span-1 md:row-span-1"
         >
           <AetherDBVisual />
         </ProductCard>
+        </ScrollReveal>
 
         {/* CARD 2: NexusCMS */}
+        <ScrollReveal delay={1 * 0.1}>
         <ProductCard
           title="NexusCMS Federated Node"
           category="Enterprise Headless CMS"
           tags={["Next.js", "Edge Runtime", "Supabase", "PostgreSQL", "GraphQL"]}
+          description="Next-generation headless content management utilizing GraphQL edge federation. Resolves nested schemas dynamically across localized nodes, using zero-copy caches and instant invalidation hooks."
           className="md:col-span-2 md:row-span-2"
         >
           <NexusCMSVisual />
         </ProductCard>
+        </ScrollReveal>
 
         {/* CARD 3: Spectra Identity */}
+        <ScrollReveal delay={2 * 0.1}>
         <ProductCard
           title="Spectra Biometric Shield"
           category="Cryptographic ZK-Auth"
           tags={["WebAuthn", "ZK-Snarks", "TypeScript", "Redis"]}
+          description="Enterprise biometric authentication engine utilizing secure hardware-level WebAuthn and cryptographic ZK-Snarks. Validates active user sessions with zero exposure of underlying biometrics or private keys."
           className="md:col-span-1 md:row-span-1"
         >
           <SpectraVisual />
         </ProductCard>
+        </ScrollReveal>
 
         {/* CARD 4: Chronos Engine */}
+        <ScrollReveal delay={3 * 0.1}>
         <ProductCard
           title="Chronos Flow Controller"
           category="Cron/Job Runner & Orchestrator"
           tags={["Go", "Temporal", "gRPC", "Docker", "Prometheus"]}
+          description="High-throughput distributed task orchestration framework designed in Go. Coordinates state machine transitions, concurrent job queues, and self-healing rollbacks with strict temporal guarantees."
           className="md:col-span-1 md:row-span-2"
         >
           <ChronosVisual />
         </ProductCard>
+        </ScrollReveal>
 
         {/* CARD 5: Helios Analytics */}
+        <ScrollReveal delay={4 * 0.1}>
         <ProductCard
           title="Helios High-Throughput Engine"
           category="Zero-Knowledge Analytics"
           tags={["ClickHouse", "React", "Vector", "Apache Kafka"]}
+          description="Real-time analytics engine engineered for massive telemetry ingestion. Channels millions of events via Apache Kafka and ClickHouse, rendering fully interactive sparklines with sub-millisecond lag."
           className="md:col-span-2 md:row-span-1"
         >
           <HeliosVisual />
         </ProductCard>
+        </ScrollReveal>
 
         {/* CARD 6: Mitrixo Engine Core */}
+        <ScrollReveal delay={5 * 0.1}>
         <ProductCard
           title="Mitrixo Compute Engine"
           category="Bare-Metal Orchestrator"
           tags={["Kubernetes", "WASM", "Linux", "QEMU", "eBPF"]}
+          description="A low-overhead orchestrator executing sandboxed WebAssembly runtimes directly on bare metal hypervisors. Uses custom eBPF filters for real-time packet introspection and zero-loss virtualization."
           className="md:col-span-2 md:row-span-1"
         >
           <MitrixoCoreVisual />
         </ProductCard>
+        </ScrollReveal>
 
       </div>
 
