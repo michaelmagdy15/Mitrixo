@@ -58,7 +58,7 @@ const lineVariants = {
   hidden: { scaleX: 0 },
   visible: {
     scaleX: 1,
-    transition: { duration: 0.5, ease: 'easeOut', delay: 0.3 },
+    transition: { duration: 0.5, ease: [0.0, 0.0, 0.2, 1] as const, delay: 0.3 },
   },
 };
 
@@ -66,7 +66,7 @@ const mobileLineVariants = {
   hidden: { scaleY: 0 },
   visible: {
     scaleY: 1,
-    transition: { duration: 0.5, ease: 'easeOut', delay: 0.3 },
+    transition: { duration: 0.5, ease: [0.0, 0.0, 0.2, 1] as const, delay: 0.3 },
   },
 };
 

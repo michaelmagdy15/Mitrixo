@@ -29,3 +29,8 @@ docker-compose*
 # Miscellaneous metadata files
 *.md
 LICENSE
+
+# Large unused files
+eslint_report.*
+Mitrixo Logov2.png
+tsconfig.tsbuildinfo
