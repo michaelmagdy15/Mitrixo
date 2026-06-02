@@ -2,24 +2,38 @@
 
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import Navigation from "@/components/Navigation";
 import CanvasGridBackground from "@/components/CanvasGridBackground";
-import Hero from "@/components/Hero";
-import EcosystemHub from "@/components/EcosystemHub";
-import XOBlueprint from "@/components/XOBlueprint";
-import ProductPipeline from "@/components/ProductPipeline";
-import ProjectDiscoveryForm from "@/components/ProjectDiscoveryForm";
-import PremiumFooter from "@/components/PremiumFooter";
 import CinematicPreloader from "@/components/CinematicPreloader";
 import CustomCursor from "@/components/CustomCursor";
-import TrustedBy from "@/components/TrustedBy";
-import StatsSection from "@/components/StatsSection";
-import SelectedWork from "@/components/SelectedWork";
-import ProcessSection from "@/components/ProcessSection";
-import Testimonials from "@/components/Testimonials";
+import { Mail, CheckCircle2, ArrowRight } from "lucide-react";
 
 export default function HomeClient() {
   const [showPreloader, setShowPreloader] = useState(true);
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      setStatus("error");
+      setErrorMessage("Please enter your email address.");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setStatus("error");
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
+
+    setStatus("submitting");
+    // Simulate database/API latency for high-fidelity experience
+    setTimeout(() => {
+      setStatus("success");
+      setEmail("");
+    }, 1200);
+  };
 
   return (
     <div className="relative min-h-screen bg-brand-dark overflow-hidden font-sans select-none antialiased">
@@ -30,76 +44,175 @@ export default function HomeClient() {
         )}
       </AnimatePresence>
 
-      {/* High-Performance Coordinate Blueprint Canvas Background */}
+      {/* Coordinate Blueprint Canvas Background */}
       <CanvasGridBackground />
 
-      {/* Coordinated entrance of the main page elements once preloader exits */}
+      {/* Ambient background glows */}
+      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] rounded-full bg-blue-500/5 blur-[120px] pointer-events-none z-0" />
+      <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full bg-amber-500/5 blur-[120px] pointer-events-none z-0" />
+
+      {/* Main page content entrance sequence */}
       {!showPreloader && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full flex flex-col min-h-screen relative"
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 w-full min-h-screen flex flex-col justify-between px-6 py-8"
         >
-          {/* Frosted Matte Header & Navigation Drawer */}
-          <Navigation />
-
-          {/* Custom Cursor — floating element, always present outside main flow */}
+          {/* Custom interactive cursor */}
           <CustomCursor />
 
-          {/* Core Structural Flow */}
-          <main className="relative z-10 w-full flex flex-col items-center">
+          {/* Simple header */}
+          <header className="w-full max-w-6xl mx-auto flex items-center justify-between pointer-events-auto">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 bg-amber-500 rounded-full border border-amber-400 text-amber-500 animate-pulse border-amber-glow" />
+              <span className="font-mono text-xs font-extrabold tracking-[0.25em] text-zinc-300 uppercase select-none">
+                MITRIXO SYSTEM
+              </span>
+            </div>
+            <a 
+              href="mailto:hello@mitrixo.com"
+              className="text-xs font-mono text-zinc-400 hover:text-amber-500 tracking-wider transition-colors duration-200"
+            >
+              CONTACT INQUIRY
+            </a>
+          </header>
 
-            {/* Cinematic Logo Entrance Sequence & Dynamic Tagline Hero */}
-            <Hero />
+          {/* Centered Coming Soon Section */}
+          <main className="w-full flex-grow flex items-center justify-center py-12 pointer-events-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+              className="glass-card w-full max-w-xl p-8 md:p-12 rounded-3xl relative overflow-hidden text-center shadow-2xl"
+            >
+              {/* Card accent corners */}
+              <div className="absolute top-3 left-3 w-2 h-2 border-t border-l border-white/10" />
+              <div className="absolute top-3 right-3 w-2 h-2 border-t border-r border-white/10" />
+              <div className="absolute bottom-3 left-3 w-2 h-2 border-b border-l border-white/10" />
+              <div className="absolute bottom-3 right-3 w-2 h-2 border-b border-r border-white/10" />
 
-            {/* Social Proof: Trusted By Logos */}
-            <section className="w-full relative z-20">
-              <TrustedBy />
-            </section>
+              {/* Status glow badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/20 bg-amber-500/5 text-amber-500 text-[10px] md:text-xs font-bold tracking-wider uppercase mb-8 select-none border-amber-glow">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                SaaS Product Studio — Next Gen System v2
+              </div>
 
-            {/* Key Metrics & Impact Numbers */}
-            <section className="w-full relative z-20">
-              <StatsSection />
-            </section>
+              {/* Brand Logo */}
+              <div className="mb-6 flex justify-center select-none pointer-events-none">
+                <motion.img 
+                  src="/logo.png" 
+                  alt="Mitrixo Logo" 
+                  className="h-12 w-auto object-contain bg-transparent select-none pointer-events-none"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                />
+              </div>
 
-            {/* Split Axis Showcase: Engineering Division & Cinematic Visuals Studio */}
-            <section id="ecosystem" className="w-full relative z-20">
-              <EcosystemHub />
-            </section>
+              {/* Headline */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400 font-sans leading-[1.1] uppercase">
+                THE NEXT EVOLUTION <br /> IS <span className="text-amber-500 text-amber-glow font-extrabold">COMING SOON</span>
+              </h1>
 
-            {/* Portfolio: Selected Work Showcase */}
-            <section id="work" className="w-full relative z-20">
-              <SelectedWork />
-            </section>
+              {/* Subtext */}
+              <p className="text-zinc-400 text-sm md:text-base max-w-md mx-auto mb-10 font-normal leading-relaxed">
+                We are currently architecting a powerful suite of high-fidelity SaaS applications and custom digital infrastructure. The new experience is under active development.
+              </p>
 
-            {/* The Brand Manifesto: I/O, XO, and The Multiplier Grid */}
-            <section id="blueprint" className="w-full relative z-20">
-              <XOBlueprint />
-            </section>
+              {/* Interative Waitlist capture form */}
+              <div className="relative max-w-md mx-auto w-full z-20">
+                <AnimatePresence mode="wait">
+                  {status === "success" ? (
+                    <motion.div 
+                      key="success"
+                      initial={{ opacity: 0, scale: 0.96 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.96 }}
+                      className="p-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 flex items-center justify-center gap-3 border-emerald-glow"
+                    >
+                      <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
+                      <span className="text-xs md:text-sm font-semibold tracking-wide uppercase font-mono">
+                        Success! added to launch queue
+                      </span>
+                    </motion.div>
+                  ) : (
+                    <motion.form 
+                      key="form"
+                      onSubmit={handleSubmit} 
+                      className="w-full flex flex-col gap-2.5 relative"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <div className="relative flex items-center rounded-2xl bg-zinc-950/50 border border-white/5 p-1.5 focus-within:border-amber-500/30 focus-within:ring-1 focus-within:ring-amber-500/30 transition-all duration-300">
+                        <Mail className="absolute left-4 w-5 h-5 text-zinc-500 pointer-events-none" />
+                        <input 
+                          type="email" 
+                          placeholder="Enter email to get notified..." 
+                          value={email}
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                            if (status === "error") setStatus("idle");
+                          }}
+                          disabled={status === "submitting"}
+                          className="w-full bg-transparent pl-11 pr-32 py-3 text-xs md:text-sm text-zinc-100 placeholder-zinc-500 border-none outline-none focus:ring-0 font-medium"
+                        />
+                        <button 
+                          type="submit" 
+                          disabled={status === "submitting"}
+                          className="absolute right-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-brand-dark font-extrabold text-[10px] md:text-xs tracking-wider uppercase flex items-center gap-1.5 shadow-lg shadow-amber-500/10 active:scale-95 transition-all duration-200 cursor-pointer disabled:opacity-50"
+                        >
+                          {status === "submitting" ? (
+                            <span className="w-4 h-4 border-2 border-brand-dark border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                            <>
+                              Notify Me
+                              <ArrowRight className="w-3.5 h-3.5" />
+                            </>
+                          )}
+                        </button>
+                      </div>
+                      {status === "error" && (
+                        <motion.p 
+                          initial={{ opacity: 0, y: -5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="text-xs text-red-400 text-left pl-4 font-mono font-medium tracking-wide"
+                        >
+                          {errorMessage}
+                        </motion.p>
+                      )}
+                    </motion.form>
+                  )}
+                </AnimatePresence>
+              </div>
 
-            {/* How We Work: Process & Methodology */}
-            <section id="process" className="w-full relative z-20">
-              <ProcessSection />
-            </section>
-
-            {/* Asymmetrical Bento Grid Showcase of Proprietary Applications */}
-            <section id="products" className="w-full relative z-20">
-              <ProductPipeline />
-            </section>
-
-            {/* Client Testimonials */}
-            <section id="testimonials" className="w-full relative z-20">
-              <Testimonials />
-            </section>
-
-            {/* Partnership / Project Discovery Interactive Form */}
-            <ProjectDiscoveryForm />
-
+              {/* Architectural inquiry footer */}
+              <div className="mt-12 pt-8 border-t border-white/[0.03] text-center">
+                <p className="text-zinc-500 text-[10px] font-mono tracking-widest uppercase mb-1">
+                  ARCHITECTURAL INQUIRY
+                </p>
+                <a 
+                  href="mailto:hello@mitrixo.com" 
+                  className="inline-flex items-center text-xs md:text-sm text-zinc-400 hover:text-amber-500 font-extrabold tracking-wider transition-colors duration-200"
+                >
+                  hello@mitrixo.com
+                </a>
+              </div>
+            </motion.div>
           </main>
 
-          {/* Premium Minimal Footer & Amber Glow XO engine marker */}
-          <PremiumFooter />
+          {/* Simple clean footer */}
+          <footer className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 mt-8 pointer-events-auto">
+            <span className="font-mono text-[10px] tracking-wider text-zinc-500 select-none">
+              &copy; {new Date().getFullYear()} MITRIXO. ALL RIGHTS RESERVED.
+            </span>
+            <div className="flex gap-4">
+              <span className="font-mono text-[10px] tracking-wider text-zinc-500 select-none uppercase">
+                Studio Edition 2026
+              </span>
+            </div>
+          </footer>
         </motion.div>
       )}
     </div>
