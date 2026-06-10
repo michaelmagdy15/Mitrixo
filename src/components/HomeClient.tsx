@@ -6,6 +6,7 @@ import CanvasGridBackground from "@/components/CanvasGridBackground";
 import CinematicPreloader from "@/components/CinematicPreloader";
 import CustomCursor from "@/components/CustomCursor";
 import Portfolio from "@/components/Portfolio";
+import BrandDNA from "@/components/BrandDNA";
 import { Mail, CheckCircle2, ArrowRight } from "lucide-react";
 
 export default function HomeClient() {
@@ -249,6 +250,9 @@ export default function HomeClient() {
               </div>
             </motion.div>
           </main>
+
+          {/* Brand DNA / Origin Section */}
+          <BrandDNA />
 
           {/* Interactive Project Portfolio Section */}
           <Portfolio />
