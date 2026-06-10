@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import CanvasGridBackground from "@/components/CanvasGridBackground";
 import CinematicPreloader from "@/components/CinematicPreloader";
 import CustomCursor from "@/components/CustomCursor";
+import Portfolio from "@/components/Portfolio";
 import { Mail, CheckCircle2, ArrowRight } from "lucide-react";
 
 export default function HomeClient() {
@@ -13,7 +14,7 @@ export default function HomeClient() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
       setStatus("error");
@@ -28,15 +29,32 @@ export default function HomeClient() {
     }
 
     setStatus("submitting");
-    // Simulate database/API latency for high-fidelity experience
-    setTimeout(() => {
-      setStatus("success");
-      setEmail("");
-    }, 1200);
+    try {
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setStatus("success");
+        setEmail("");
+      } else {
+        setStatus("error");
+        setErrorMessage(data.error || "Failed to join waitlist. Please try again.");
+      }
+    } catch (error) {
+      setStatus("error");
+      setErrorMessage("Connection failed. Please check your network and try again.");
+    }
   };
 
   return (
-    <div className="relative min-h-screen bg-brand-dark overflow-hidden font-sans select-none antialiased">
+    <div className="relative min-h-screen bg-brand-dark overflow-y-auto font-sans select-none antialiased">
       {/* Cinematic Logo Preloader */}
       <AnimatePresence mode="wait">
         {showPreloader && (
@@ -79,7 +97,7 @@ export default function HomeClient() {
           </header>
 
           {/* Centered Coming Soon Section */}
-          <main className="w-full flex-grow flex items-center justify-center py-12 pointer-events-auto">
+          <main className="w-full flex-grow flex flex-col items-center justify-center py-16 pointer-events-auto">
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -187,6 +205,17 @@ export default function HomeClient() {
                 </AnimatePresence>
               </div>
 
+              {/* Exploration Downward Scroll CTA */}
+              <div className="flex justify-center mt-6">
+                <a
+                  href="#portfolio"
+                  className="inline-flex items-center gap-2 text-[10px] font-mono text-zinc-500 hover:text-amber-500 tracking-[0.2em] uppercase transition-all duration-300"
+                >
+                  Explore System Portfolio
+                  <ArrowRight className="w-3.5 h-3.5 rotate-90 animate-bounce" />
+                </a>
+              </div>
+
               {/* Architectural inquiry footer */}
               <div className="mt-12 pt-8 border-t border-white/[0.03] text-center">
                 <p className="text-zinc-500 text-[10px] font-mono tracking-widest uppercase mb-1">
@@ -202,8 +231,11 @@ export default function HomeClient() {
             </motion.div>
           </main>
 
+          {/* Interactive Project Portfolio Section */}
+          <Portfolio />
+
           {/* Simple clean footer */}
-          <footer className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 mt-8 pointer-events-auto">
+          <footer className="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 mt-8 pt-8 border-t border-white/[0.03] pointer-events-auto">
             <span className="font-mono text-[10px] tracking-wider text-zinc-500 select-none">
               &copy; {new Date().getFullYear()} MITRIXO. ALL RIGHTS RESERVED.
             </span>

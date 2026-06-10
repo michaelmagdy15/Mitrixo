@@ -93,31 +93,41 @@ export default function CinematicPreloader({ onComplete }: CinematicPreloaderPro
         
         {/* Real logo image inside a clean, minimal glass container */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ 
-            opacity: progress / 100, 
-            scale: 0.98 + (progress / 100) * 0.02,
+            opacity: 1, 
+            scale: 1,
+            y: 0
           }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="relative z-10 w-full h-[120px] flex items-center justify-center rounded-2xl border border-white/[0.04] bg-white/[0.01] backdrop-blur-xl shadow-2xl p-6 overflow-hidden"
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 w-full h-[140px] flex items-center justify-center rounded-2xl border border-white/[0.04] bg-[#171717]/80 backdrop-blur-xl shadow-2xl p-6 overflow-hidden border-amber-glow"
         >
           {/* Subtle Corner accents */}
-          <div className="absolute top-2 left-2 w-1.5 h-1.5 border-t border-l border-white/20" />
-          <div className="absolute top-2 right-2 w-1.5 h-1.5 border-t border-r border-white/20" />
-          <div className="absolute bottom-2 left-2 w-1.5 h-1.5 border-b border-l border-white/20" />
-          <div className="absolute bottom-2 right-2 w-1.5 h-1.5 border-b border-r border-white/20" />
+          <div className="absolute top-2 left-2 w-1.5 h-1.5 border-t border-l border-amber-500/30" />
+          <div className="absolute top-2 right-2 w-1.5 h-1.5 border-t border-r border-amber-500/30" />
+          <div className="absolute bottom-2 left-2 w-1.5 h-1.5 border-b border-l border-amber-500/30" />
+          <div className="absolute bottom-2 right-2 w-1.5 h-1.5 border-b border-r border-amber-500/30" />
+
+          {/* Glowing Scanning Sweep Effect */}
+          <motion.div
+            initial={{ left: "-100%" }}
+            animate={{ left: "100%" }}
+            transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
+            className="absolute top-0 bottom-0 w-1/3 bg-gradient-to-r from-transparent via-amber-500/10 to-transparent pointer-events-none z-20"
+          />
 
           {/* Animated Logo Image */}
           <motion.img 
             src="/logo.png" 
             alt="Mitrixo Logo" 
-            className="h-14 w-auto object-contain bg-transparent select-none pointer-events-none relative z-10"
+            className="h-16 w-auto object-contain bg-transparent select-none pointer-events-none relative z-10"
             animate={{
-              scale: [1, 1.02, 1],
-              opacity: [0.9, 1, 0.9]
+              scale: [1, 1.03, 1],
+              opacity: [0.95, 1, 0.95],
+              filter: ["drop-shadow(0 0 0px rgba(251, 191, 36, 0))", "drop-shadow(0 0 10px rgba(251, 191, 36, 0.2))", "drop-shadow(0 0 0px rgba(251, 191, 36, 0))"]
             }}
             transition={{
-              duration: 4,
+              duration: 3,
               repeat: Infinity,
               ease: "easeInOut"
             }}
@@ -132,12 +142,12 @@ export default function CinematicPreloader({ onComplete }: CinematicPreloaderPro
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ type: "tween", duration: 0.05 }}
-              className="h-full bg-gradient-to-r from-sky-400 to-violet-500"
+              className="h-full bg-gradient-to-r from-amber-500 to-amber-600"
             />
           </div>
 
           {/* Percentage */}
-          <div className="font-mono text-xs font-semibold tracking-[0.15em] text-zinc-400">
+          <div className="font-mono text-xs font-semibold tracking-[0.15em] text-amber-500 text-amber-glow">
             {progress}%
           </div>
         </div>
