@@ -88,12 +88,22 @@ export default function HomeClient() {
                 MITRIXO SYSTEM
               </span>
             </div>
-            <a 
-              href="mailto:hello@mitrixo.com"
-              className="text-xs font-mono text-zinc-400 hover:text-amber-500 tracking-wider transition-colors duration-200"
-            >
-              CONTACT INQUIRY
-            </a>
+            <div className="flex items-center gap-6">
+              <a 
+                href="https://workout.mitrixo.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-mono text-amber-500 hover:text-amber-400 tracking-wider transition-colors duration-200 text-amber-glow"
+              >
+                WORKOUT PLATFORM ↗
+              </a>
+              <a 
+                href="mailto:hello@mitrixo.com"
+                className="text-xs font-mono text-zinc-400 hover:text-amber-500 tracking-wider transition-colors duration-200"
+              >
+                CONTACT INQUIRY
+              </a>
+            </div>
           </header>
 
           {/* Centered Coming Soon Section */}
@@ -206,13 +216,22 @@ export default function HomeClient() {
               </div>
 
               {/* Exploration Downward Scroll CTA */}
-              <div className="flex justify-center mt-6">
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-6">
                 <a
                   href="#portfolio"
                   className="inline-flex items-center gap-2 text-[10px] font-mono text-zinc-500 hover:text-amber-500 tracking-[0.2em] uppercase transition-all duration-300"
                 >
                   Explore System Portfolio
                   <ArrowRight className="w-3.5 h-3.5 rotate-90 animate-bounce" />
+                </a>
+                <span className="hidden sm:inline text-zinc-700">|</span>
+                <a
+                  href="https://workout.mitrixo.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-[10px] font-mono text-amber-500 hover:text-amber-400 tracking-[0.2em] uppercase transition-all duration-300 text-amber-glow"
+                >
+                  Workout Platform ↗
                 </a>
               </div>
 

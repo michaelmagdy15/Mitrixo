@@ -12,6 +12,7 @@ interface Project {
   description: string;
   scope: string;
   capabilities: string[];
+  externalUrl?: string;
 }
 
 const projectsData: Project[] = [
@@ -220,7 +221,8 @@ const projectsData: Project[] = [
     stack: ["Next.js", "Model Context Protocol Server", "OpenAI API"],
     description: "AI-powered fitness tracking application.",
     scope: "Comprehensive AI fitness application bridging a Next.js client with an MCP server to log activities in natural language.",
-    capabilities: ["Conversational natural language coach", "SSE/HTTP Model Context Protocol tools", "Offline activity logs queue caching", "Python PDF regimen handout builder"]
+    capabilities: ["Conversational natural language coach", "SSE/HTTP Model Context Protocol tools", "Offline activity logs queue caching", "Python PDF regimen handout builder"],
+    externalUrl: "https://workout.mitrixo.com"
   }
 ];
 
@@ -430,6 +432,19 @@ export default function Portfolio() {
                     ))}
                   </div>
                 </div>
+
+                {activeProject.externalUrl && (
+                  <div className="pt-4 border-t border-white/[0.04] mt-6">
+                    <a
+                      href={activeProject.externalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-brand-dark font-extrabold text-xs tracking-wider uppercase shadow-lg shadow-amber-500/10 transition-all duration-200"
+                    >
+                      Launch Application ↗
+                    </a>
+                  </div>
+                )}
               </div>
             </motion.div>
           </motion.div>
