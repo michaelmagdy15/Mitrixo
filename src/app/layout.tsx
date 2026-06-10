@@ -5,6 +5,15 @@ export const metadata = {
   title: "MITRIXO — Enterprise Software House & SaaS Product Studio",
   description: "We engineer high-fidelity digital infrastructure, proprietary SaaS products, and custom CMS systems for the next generation. Incorporating Mitry Visuals creative studio.",
   metadataBase: new URL("https://mitrixo.com"),
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
